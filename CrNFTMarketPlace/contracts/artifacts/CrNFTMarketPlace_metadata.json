@@ -333,11 +333,11 @@
 	},
 	"sources": {
 		"CrNFTMarketPlace/contracts/CrNFTMarketPlace.sol": {
-			"keccak256": "0xaba84dc0744157029dc90c757292aecb1f68caa6e21ca2d55265c3570017e895",
+			"keccak256": "0x8e55a6cc2f4c79db77ccf51f5f1ed779a43ff77f990f869331a21261b5b6634c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://93ba09a5bcb590b6ccb81de780b6101433eb0e7e21e7749f40fb6ea11b9fe03c",
-				"dweb:/ipfs/QmTMYWB617quKhTKFbLYYJof5k8phQMCteafxGCgFudrES"
+				"bzz-raw://321a134633b979fbf9a2b449c9680394da3e9e95b124e5e0a9672ab95e519e8e",
+				"dweb:/ipfs/QmPuze2mPKQCQDLZ6jj2V5nMnAP9rZvwZoprV3wuHdZhbG"
 			]
 		}
 	},
