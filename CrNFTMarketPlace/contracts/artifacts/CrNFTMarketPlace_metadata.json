@@ -60,6 +60,25 @@
 					{
 						"indexed": true,
 						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "NFTMinted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
 						"name": "buyer",
 						"type": "address"
 					},
@@ -172,6 +191,24 @@
 					}
 				],
 				"name": "listNFT",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "mintNFT",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -296,11 +333,11 @@
 	},
 	"sources": {
 		"CrNFTMarketPlace/contracts/CrNFTMarketPlace.sol": {
-			"keccak256": "0x46f71ea67f37f157a5c16c8abf20abae659cc68046cb03795ab02e9667c632df",
+			"keccak256": "0xaba84dc0744157029dc90c757292aecb1f68caa6e21ca2d55265c3570017e895",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6bc4119f35cca93cfdae54a120bdacffe3a895f7c88b1209c5202bc284d90bb0",
-				"dweb:/ipfs/QmUxdsmSBa4YMvgzbgH11QEupzDGAp4pwkFnzyWd1FP9Zi"
+				"bzz-raw://93ba09a5bcb590b6ccb81de780b6101433eb0e7e21e7749f40fb6ea11b9fe03c",
+				"dweb:/ipfs/QmTMYWB617quKhTKFbLYYJof5k8phQMCteafxGCgFudrES"
 			]
 		}
 	},
