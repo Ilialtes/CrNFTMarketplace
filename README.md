@@ -1,5 +1,5 @@
 # CrNFTMarketplace
-fist costa rican nft marketplace
+first costa rican nft marketplace
 
 
 
