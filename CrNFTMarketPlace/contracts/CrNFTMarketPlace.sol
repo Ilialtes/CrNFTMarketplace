@@ -30,7 +30,7 @@ pragma solidity ^0.8.27;
 // - solo el owner puede cambiar precio de nft
 // - verificar que sea la misma moneda
 
-contract NFTMarketplace {
+contract CrNFTMarketPlace {
     // Struct to represent an NFT
     struct NFT {
         address owner;
