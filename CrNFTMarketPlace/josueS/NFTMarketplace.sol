@@ -38,6 +38,13 @@ contract NFTMarketplace is ReentrancyGuard {
     mapping(uint256 => Listing) public listings;
     mapping(address => uint256[]) public ownerTokens;
 
+    constructor(uint256 _feePercent) {
+        owner = msg.sender;
+        fee = _feePercent;
+        paused = false;
+        _setTotalSupply(0);
+    }
+
     // modifiers
     modifier onlyOwner() {
         require(msg.sender == owner, "Not the contract owner");
@@ -49,10 +56,17 @@ contract NFTMarketplace is ReentrancyGuard {
         _;
     }
 
-    constructor(uint256 _feePercent) {
-        owner = msg.sender;
-        fee = _feePercent;
-        paused = false;
+    // Function to check if the string is not empty
+    function _isNotEmptyString(string memory str) internal pure returns (bool) {
+        return bytes(str).length > 0;
+    }
+
+    function _setTotalSupply(uint256 newNumber) internal {
+        totalSupply = newNumber;
+    }
+
+    function _incrementTotalSupply() internal {
+        totalSupply++;
     }
 
     function pause() public onlyOwner {
@@ -66,6 +80,8 @@ contract NFTMarketplace is ReentrancyGuard {
     }
 
     function mint(string memory _tokenURI) external whenNotPaused {
+        require(_isNotEmptyString(_tokenURI), "Token Uri is empty!");
+
         uint256 newTokenId = totalSupply + 1;
 
         nfts[newTokenId] = NFT({
@@ -76,7 +92,7 @@ contract NFTMarketplace is ReentrancyGuard {
 
         ownerTokens[msg.sender].push(newTokenId);
 
-        totalSupply++;
+        _incrementTotalSupply();
 
         emit NFTMinted(msg.sender, newTokenId);
     }
@@ -94,7 +110,12 @@ contract NFTMarketplace is ReentrancyGuard {
         emit NFTListed(_tokenId, _price);
     }
 
-    function purchaseNFT(uint256 _tokenId) external payable whenNotPaused nonReentrant {
+    function purchaseNFT(uint256 _tokenId)
+        external
+        payable
+        whenNotPaused
+        nonReentrant
+    {
         Listing memory listing = listings[_tokenId];
 
         require(listing.active, "NFT is not for sale");
@@ -114,7 +135,7 @@ contract NFTMarketplace is ReentrancyGuard {
         uint256 sellerAmount = price - feeAmount;
 
         nfts[_tokenId].owner = msg.sender;
-        removeTokenFromOwner(seller, _tokenId);
+        _removeTokenFromOwner(seller, _tokenId);
         ownerTokens[msg.sender].push(_tokenId);
 
         listings[_tokenId].active = false;
@@ -134,7 +155,10 @@ contract NFTMarketplace is ReentrancyGuard {
         emit NFTPurchased(msg.sender, _tokenId, price, feeAmount);
     }
 
-    function removeTokenFromOwner(address _owner, uint256 _tokenId) internal whenNotPaused {
+    function _removeTokenFromOwner(address _owner, uint256 _tokenId)
+        internal
+        whenNotPaused
+    {
         uint256[] storage tokens = ownerTokens[_owner];
         for (uint256 i = 0; i < tokens.length; i++) {
             if (tokens[i] == _tokenId) {

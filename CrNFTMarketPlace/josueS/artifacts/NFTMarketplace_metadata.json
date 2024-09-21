@@ -364,11 +364,11 @@
 			]
 		},
 		"CrNFTMarketPlace/josueS/NFTMarketplace.sol": {
-			"keccak256": "0x76958687c578e569fec4497e35bf39ec4bcb627d742eed5d78cbda47ed1e4657",
+			"keccak256": "0xcc6bf82b77ff1f2ad59d1ed5922e5d1ed094d6da57098dd4b4fd9b5d1bb43c16",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://98cd74e4812ba6faab9f4a71f732d327538959d8cb377ee2917d333597af9edb",
-				"dweb:/ipfs/QmPEVjp1E86qx1Ke6Lxk9WEr1n1ArPJuyGzCkuEMHeW7Y6"
+				"bzz-raw://2f72a6f8154b7b4bd159597e4d98b79a02662b8c8192cdfbacd8b138ffcafb93",
+				"dweb:/ipfs/QmZii99u5p1o5WHeKuCizPjKvLMEEQB7xR5y2M9UGmLjZ8"
 			]
 		}
 	},
