@@ -26,3 +26,35 @@ Output from script will appear in remix terminal.
 Please note, require/import is supported in a limited manner for Remix supported modules.
 For now, modules supported by Remix are ethers, web3, swarmgw, chai, multihashes, remix and hardhat only for hardhat.ethers object/plugin.
 For unsupported modules, an error like this will be thrown: '<module_name> module require is not supported by Remix IDE' will be shown.
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// NFT stuct - con estado, addres
+
+// Mapping de Address a NFT
+
+// Mapping del precio al struct de NFT *
+
+// *** Funciones
+// - sell
+// - buy
+// - list
+// - subasta *
+// - changeState
+// - conexion con las wallets
+// - contructor a un owner
+// - fee para el owner
+// - change value
+
+// *** Events al cambiar de estado
+
+// *** Require 
+// - solo owner puede vender
+// - Change sel status
+// - comprobar fondos para comprar 
+// - comprobar stado de NFT antes de comprar
+// - solo el owner puede cambiar precio de nft
+// - verificar que sea la misma moneda
+
+// 
