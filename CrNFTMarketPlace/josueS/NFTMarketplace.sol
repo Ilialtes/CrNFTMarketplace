@@ -3,9 +3,10 @@ pragma solidity ^0.8.27;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract NFTMarketplace is ReentrancyGuard{
+contract NFTMarketplace is ReentrancyGuard {
     address public owner;
     uint256 public fee;
+    bool public paused;
 
     event NFTMinted(address indexed owner, uint256 indexed tokenId);
     event NFTListed(uint256 indexed tokenId, uint256 price);
@@ -16,6 +17,9 @@ contract NFTMarketplace is ReentrancyGuard{
         uint256 price,
         uint256 fee
     );
+
+    event Paused();
+    event Unpaused();
 
     struct NFT {
         uint256 tokenId;
@@ -40,12 +44,28 @@ contract NFTMarketplace is ReentrancyGuard{
         _;
     }
 
+    modifier whenNotPaused() {
+        require(!paused, "El contrato esta pausado");
+        _;
+    }
+
     constructor(uint256 _feePercent) {
         owner = msg.sender;
         fee = _feePercent;
+        paused = false;
     }
 
-    function mint(string memory _tokenURI) external {
+    function pause() public onlyOwner {
+        paused = true;
+        emit Paused();
+    }
+
+    function unpause() public onlyOwner {
+        paused = false;
+        emit Unpaused();
+    }
+
+    function mint(string memory _tokenURI) external whenNotPaused {
         uint256 newTokenId = totalSupply + 1;
 
         nfts[newTokenId] = NFT({
@@ -74,44 +94,47 @@ contract NFTMarketplace is ReentrancyGuard{
         emit NFTListed(_tokenId, _price);
     }
 
- function purchaseNFT(uint256 _tokenId) external payable nonReentrant {
-    Listing memory listing = listings[_tokenId];
+    function purchaseNFT(uint256 _tokenId) external payable whenNotPaused nonReentrant {
+        Listing memory listing = listings[_tokenId];
 
-    require(listing.active, "NFT is not for sale");
-    require(msg.value >= listing.price, "Insufficient funds");
+        require(listing.active, "NFT is not for sale");
+        require(msg.value >= listing.price, "Insufficient funds");
 
-    uint256 price = listing.price;
-    address seller = listing.seller;
+        uint256 price = listing.price;
+        address seller = listing.seller;
 
-    require(seller != address(0), "Seller address is zero");
-    require(owner != address(0), "Owner address is zero");
-    require(nfts[_tokenId].owner == seller, "Seller no longer owns this NFT");
+        require(seller != address(0), "Seller address is zero");
+        require(owner != address(0), "Owner address is zero");
+        require(
+            nfts[_tokenId].owner == seller,
+            "Seller no longer owns this NFT"
+        );
 
-    uint256 feeAmount = (price * fee) / 100;
-    uint256 sellerAmount = price - feeAmount;
+        uint256 feeAmount = (price * fee) / 100;
+        uint256 sellerAmount = price - feeAmount;
 
-    nfts[_tokenId].owner = msg.sender;
-    removeTokenFromOwner(seller, _tokenId);
-    ownerTokens[msg.sender].push(_tokenId);
+        nfts[_tokenId].owner = msg.sender;
+        removeTokenFromOwner(seller, _tokenId);
+        ownerTokens[msg.sender].push(_tokenId);
 
-    listings[_tokenId].active = false;
+        listings[_tokenId].active = false;
 
-    (bool sentToOwner, ) = owner.call{value: feeAmount}("");
-    require(sentToOwner, "Failed to send fee to owner");
+        (bool sentToOwner, ) = owner.call{value: feeAmount}("");
+        require(sentToOwner, "Failed to send fee to owner");
 
-    (bool sentToSeller, ) = seller.call{value: sellerAmount}("");
-    require(sentToSeller, "Failed to send amount to seller");
+        (bool sentToSeller, ) = seller.call{value: sellerAmount}("");
+        require(sentToSeller, "Failed to send amount to seller");
 
-    uint256 excessAmount = msg.value - price;
-    if (excessAmount > 0) {
-        (bool refunded, ) = msg.sender.call{value: excessAmount}("");
-        require(refunded, "Failed to refund excess amount");
+        uint256 excessAmount = msg.value - price;
+        if (excessAmount > 0) {
+            (bool refunded, ) = msg.sender.call{value: excessAmount}("");
+            require(refunded, "Failed to refund excess amount");
+        }
+
+        emit NFTPurchased(msg.sender, _tokenId, price, feeAmount);
     }
 
-    emit NFTPurchased(msg.sender, _tokenId, price, feeAmount);
-}
-
-    function removeTokenFromOwner(address _owner, uint256 _tokenId) internal {
+    function removeTokenFromOwner(address _owner, uint256 _tokenId) internal whenNotPaused {
         uint256[] storage tokens = ownerTokens[_owner];
         for (uint256 i = 0; i < tokens.length; i++) {
             if (tokens[i] == _tokenId) {

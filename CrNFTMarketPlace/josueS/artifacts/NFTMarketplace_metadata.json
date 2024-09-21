@@ -86,6 +86,18 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [],
+				"name": "Paused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
+				"name": "Unpaused",
+				"type": "event"
+			},
+			{
 				"inputs": [],
 				"name": "fee",
 				"outputs": [
@@ -263,6 +275,26 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "pause",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "paused",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -286,6 +318,13 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "unpause",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -325,11 +364,11 @@
 			]
 		},
 		"CrNFTMarketPlace/josueS/NFTMarketplace.sol": {
-			"keccak256": "0x0a4616a0832fd26a0232ae2ebb3a7fb72e15ea41f6478756c28667744cf0d3b6",
+			"keccak256": "0x76958687c578e569fec4497e35bf39ec4bcb627d742eed5d78cbda47ed1e4657",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://beafe21236015ddc0b1277760c3a7a04fd701cb5c64ca02f9697839dcfd09315",
-				"dweb:/ipfs/QmWiuzYYkowfpiRw7sNe7W1mbZmQgMHRJdVPdx8e7oe4mn"
+				"bzz-raw://98cd74e4812ba6faab9f4a71f732d327538959d8cb377ee2917d333597af9edb",
+				"dweb:/ipfs/QmPEVjp1E86qx1Ke6Lxk9WEr1n1ArPJuyGzCkuEMHeW7Y6"
 			]
 		}
 	},
