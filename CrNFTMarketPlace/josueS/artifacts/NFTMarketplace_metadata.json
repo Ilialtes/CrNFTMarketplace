@@ -302,7 +302,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"CrNFTMarketPlace/josueS/myMarket.sol": "NFTMarketplace"
+			"CrNFTMarketPlace/josueS/NFTMarketplace.sol": "NFTMarketplace"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -316,12 +316,20 @@
 		"remappings": []
 	},
 	"sources": {
-		"CrNFTMarketPlace/josueS/myMarket.sol": {
-			"keccak256": "0x14af6c7dc7531e44257e7cf4b0f4aecb2b6f2dfcb1f66540e05d2bebf6f22b9b",
+		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
+			"keccak256": "0xa535a5df777d44e945dd24aa43a11e44b024140fc340ad0dfe42acf4002aade1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5ddde4820e204eb9483faa5d96977ca72d65df598e75508fb0b229dab709445c",
-				"dweb:/ipfs/QmeGQ41hpvj3nnFUPugwFxR4vwvAuhPuEwFGTraV96AuDc"
+				"bzz-raw://41319e7f621f2dc3733511332c4fd032f8e32ad2aa7fd6f665c19741d9941a34",
+				"dweb:/ipfs/QmcYR3bd862GD1Bc7jwrU9bGxrhUu5na1oP964bDCu2id1"
+			]
+		},
+		"CrNFTMarketPlace/josueS/NFTMarketplace.sol": {
+			"keccak256": "0x0a4616a0832fd26a0232ae2ebb3a7fb72e15ea41f6478756c28667744cf0d3b6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://beafe21236015ddc0b1277760c3a7a04fd701cb5c64ca02f9697839dcfd09315",
+				"dweb:/ipfs/QmWiuzYYkowfpiRw7sNe7W1mbZmQgMHRJdVPdx8e7oe4mn"
 			]
 		}
 	},
