@@ -2,11 +2,11 @@
 pragma solidity ^0.8.27;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
-contract NFTMarketplace is ReentrancyGuard {
-    address public owner;
-    uint256 public fee;
-    bool public paused;
+contract NFTMarketplace is Ownable, ReentrancyGuard , Pausable{
+    uint256 private  fee;
 
     event NFTMinted(address indexed owner, uint256 indexed tokenId);
     event NFTListed(uint256 indexed tokenId, uint256 price);
@@ -37,26 +37,21 @@ contract NFTMarketplace is ReentrancyGuard {
     mapping(uint256 => NFT) public nfts;
     mapping(uint256 => Listing) public listings;
     mapping(address => uint256[]) public ownerTokens;
+    mapping(bytes32 => bool) private _tokenURIExists;
 
-    constructor(uint256 _feePercent) {
-        owner = msg.sender;
+    constructor(uint256 _feePercent) Ownable(msg.sender){
         fee = _feePercent;
-        paused = false;
         _setTotalSupply(0);
     }
 
-    // modifiers
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Not the contract owner");
+    modifier unique_TokenURI(string memory tokenUri) {
+        require(
+            !_tokenURIExists[keccak256(abi.encodePacked(tokenUri))],
+            "Token URI already exists"
+        );
         _;
     }
 
-    modifier whenNotPaused() {
-        require(!paused, "El contrato esta pausado");
-        _;
-    }
-
-    // Function to check if the string is not empty
     function _isNotEmptyString(string memory str) internal pure returns (bool) {
         return bytes(str).length > 0;
     }
@@ -70,17 +65,21 @@ contract NFTMarketplace is ReentrancyGuard {
     }
 
     function pause() public onlyOwner {
-        paused = true;
+        _pause();
         emit Paused();
     }
 
     function unpause() public onlyOwner {
-        paused = false;
+        _unpause();
         emit Unpaused();
     }
 
-    function mint(string memory _tokenURI) external whenNotPaused {
-        require(_isNotEmptyString(_tokenURI), "Token Uri is empty!");
+    function mint(string memory _tokenURI)
+        external
+        whenNotPaused
+        unique_TokenURI(_tokenURI)
+    {
+        require(_isNotEmptyString(_tokenURI), "Token URI is empty!");
 
         uint256 newTokenId = totalSupply + 1;
 
@@ -91,6 +90,8 @@ contract NFTMarketplace is ReentrancyGuard {
         });
 
         ownerTokens[msg.sender].push(newTokenId);
+
+        _tokenURIExists[keccak256(abi.encodePacked(_tokenURI))] = true;
 
         _incrementTotalSupply();
 
@@ -125,7 +126,7 @@ contract NFTMarketplace is ReentrancyGuard {
         address seller = listing.seller;
 
         require(seller != address(0), "Seller address is zero");
-        require(owner != address(0), "Owner address is zero");
+        require(owner() != address(0), "Owner address is zero");
         require(
             nfts[_tokenId].owner == seller,
             "Seller no longer owns this NFT"
@@ -140,7 +141,7 @@ contract NFTMarketplace is ReentrancyGuard {
 
         listings[_tokenId].active = false;
 
-        (bool sentToOwner, ) = owner.call{value: feeAmount}("");
+        (bool sentToOwner, ) = owner().call{value: feeAmount}("");
         require(sentToOwner, "Failed to send fee to owner");
 
         (bool sentToSeller, ) = seller.call{value: sellerAmount}("");
@@ -151,8 +152,6 @@ contract NFTMarketplace is ReentrancyGuard {
             (bool refunded, ) = msg.sender.call{value: excessAmount}("");
             require(refunded, "Failed to refund excess amount");
         }
-
-        emit NFTPurchased(msg.sender, _tokenId, price, feeAmount);
     }
 
     function _removeTokenFromOwner(address _owner, uint256 _tokenId)
