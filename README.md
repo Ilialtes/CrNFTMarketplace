@@ -41,3 +41,6 @@ El contrato se basa en un Marketplace de NFTs, en el cual se pueden realizar dif
 ### Uso de bibliotecas seguras
 - Uso de OpenZeppelin para asegurar la seguridad y el seguimiento de estándares.
 
+### Uso diferentes validaciones para asegurar el correcto funcionamiento del contrato
+- Validacion para evitar que hayan NFT'S con el mismo URI
+- No permitir transacciones on insuficient funds o cuando no es el owner
